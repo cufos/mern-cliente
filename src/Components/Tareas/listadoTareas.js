@@ -1,28 +1,54 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import Tarea from "./tarea";
+import proyectoContext from "../../Context/Proyectos/proyectoContext";
+import TareaContext from "../../Context/Tarea/tareaContext";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const ListadoTareas = () => {
-  const tareasProyecto = [
-    { nombre: "Elegir hosting", estado: true },
-    { nombre: "Escoger Plataforma", estado: false },
-    { nombre: "Elegir hosting", estado: true },
-  ];
+  //estrayendo proyectos de estate inicial
+  const proyectosContext = useContext(proyectoContext);
+  const { proyecto, eliminarProyecto } = proyectosContext;
+
+  //obtener las tareas del proyecto
+  const tareasContext = useContext(TareaContext);
+  const { tareasproyecto } = tareasContext;
+
+  //En caso que no halla proyecto seleccionado
+  if (!proyecto) return <h2>Seleccione un Proyecto</h2>;
+
+  //array destructuring
+  const [proyectoActual] = proyecto;
+
+  //eliminar las tareas
+  const onClickEliminar = () => {
+    eliminarProyecto(proyectoActual.id);
+  };
 
   return (
     <Fragment>
-      <h2>Proyecto: Tienda Virtal</h2>
+      <h2>Proyecto: {proyectoActual.nombre}</h2>
 
       <ul className="listado-tareas">
-        {tareasProyecto.length === 0 ? (
+        {tareasproyecto.length === 0 ? (
           <li className="tarea">
             <p>No hay tareas</p>
           </li>
         ) : (
-          tareasProyecto.map((tarea) => <Tarea tarea={tarea} />)
+          <TransitionGroup>
+            {tareasproyecto.map((tarea) => (
+              <CSSTransition key={tarea.id} timeout={200} classNames={tarea}>
+                <Tarea tarea={tarea} />
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
         )}
       </ul>
 
-      <button type="button" className="btn btn-eliminar">
+      <button
+        type="button"
+        className="btn btn-eliminar"
+        onClick={onClickEliminar}
+      >
         Eliminar Proyecto &times;
       </button>
     </Fragment>

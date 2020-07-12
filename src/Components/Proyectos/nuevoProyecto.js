@@ -1,6 +1,17 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
+import proyectoContext from "../../Context/Proyectos/proyectoContext";
 
 const NuevoProyecto = () => {
+  //obteniendo el state del formulario
+  const proyectosContext = useContext(proyectoContext);
+  const {
+    formulario,
+    errorformulario,
+    mostrarFormulario,
+    agregarProyecto,
+    mostrarError,
+  } = proyectosContext;
+
   //state del proyecto
   const [proyecto, guardarProyecto] = useState({
     nombre: "",
@@ -20,30 +31,58 @@ const NuevoProyecto = () => {
   //cuando se envia el proyecto
   const onSubmitProyecto = (e) => {
     e.preventDefault();
+
+    //validando proyecto
+    if (nombre === "") {
+      mostrarError();
+      return;
+    }
+
+    //agregar al state
+    agregarProyecto(proyecto);
+
+    //reiniciar el form
+    guardarProyecto({
+      nombre: "",
+    });
+  };
+
+  const onClickFormulario = () => {
+    mostrarFormulario();
   };
 
   return (
     <Fragment>
-      <button type="button" className="btn btn-block btn-primario">
+      <button
+        type="button"
+        className="btn btn-block btn-primario"
+        onClick={onClickFormulario}
+      >
         Nuevo Proyecto
       </button>
 
-      <form className="formulario-nuevo-proyecto" onSubmit={onSubmitProyecto}>
-        <input
-          type="text"
-          className="input-text"
-          placeholder="Nombre Proyecto"
-          name="nombre"
-          value={nombre}
-          onChange={onChangeProyecto}
-        />
+      {formulario ? (
+        <form className="formulario-nuevo-proyecto" onSubmit={onSubmitProyecto}>
+          <input
+            type="text"
+            className="input-text"
+            placeholder="Nombre Proyecto"
+            name="nombre"
+            value={nombre}
+            onChange={onChangeProyecto}
+          />
 
-        <input
-          type="submit"
-          value="Agregar Proyecto"
-          className="btn btn-block btn-primario"
-        />
-      </form>
+          <input
+            type="submit"
+            value="Agregar Proyecto"
+            className="btn btn-block btn-primario"
+          />
+        </form>
+      ) : null}
+
+      {errorformulario ? (
+        <p className="mensaje error">El nombre del Proyecto es obligatorio</p>
+      ) : null}
     </Fragment>
   );
 };
