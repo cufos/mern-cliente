@@ -1,12 +1,17 @@
 import React, { useReducer } from "react";
 import TareaContext from "./tareaContext";
 import TareaReducer from "./tareaReducer";
+import uuid from "uuid/dist/v4";
 
 import {
   TAREAS_PROYECTO,
   AGREGAR_TAREA,
   VALIDAR_TAREA,
   ELIMINAR_TAREA,
+  ESTADO_TAREA,
+  TAREA_ACTUAL,
+  ACTUALIZAR_TAREA,
+  LIMPIAR_TAREA,
 } from "../../Types";
 
 const TareaState = (props) => {
@@ -24,6 +29,7 @@ const TareaState = (props) => {
     ],
     tareasproyecto: null,
     errortarea: false,
+    tareaseleccionada: null,
   };
 
   //creando el dispatch y el state
@@ -39,6 +45,7 @@ const TareaState = (props) => {
 
   //Agregar una tarea al proyecto seleccionado
   const agregarTarea = (tarea) => {
+    tarea.id = uuid();
     dispatch({
       type: AGREGAR_TAREA,
       payload: tarea,
@@ -59,16 +66,52 @@ const TareaState = (props) => {
     });
   };
 
+  //Cambiar el estado de la tarea
+  const cambiarEstadoTarea = (tarea) => {
+    dispatch({
+      type: ESTADO_TAREA,
+      payload: tarea,
+    });
+  };
+
+  //extraer la tarea a editar
+  const guardarTareaActual = (tarea) => {
+    dispatch({
+      type: TAREA_ACTUAL,
+      payload: tarea,
+    });
+  };
+
+  //Edita o modifica una tarea
+  const actualizarTarea = (tarea) => {
+    dispatch({
+      type: ACTUALIZAR_TAREA,
+      payload: tarea,
+    });
+  };
+
+  //limina la tarea seleccionada
+  const limpiarTarea = () => {
+    dispatch({
+      type: LIMPIAR_TAREA,
+    });
+  };
+
   return (
     <TareaContext.Provider
       value={{
         tareas: state.tareas,
         tareasproyecto: state.tareasproyecto,
         errortarea: state.errortarea,
+        tareaseleccionada: state.tareaseleccionada,
         obtenerTareas,
         agregarTarea,
         validarTarea,
         eliminarTarea,
+        cambiarEstadoTarea,
+        guardarTareaActual,
+        actualizarTarea,
+        limpiarTarea,
       }}
     >
       {props.children}
