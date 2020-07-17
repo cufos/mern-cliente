@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import AlertaContext from "../../Context/alertas/alertaContext";
 
 const NuevaCuenta = () => {
+  //extraer los valores del context
+  const alertaContext = useContext(AlertaContext);
+  const { alerta, mostrarAlerta } = alertaContext;
+
   //creando estado de mi usuario
   const [usuario, guardarUsuario] = useState({
     nombre: "",
@@ -23,12 +28,26 @@ const NuevaCuenta = () => {
   //cuando se esta autenticando
   const onSubmit = (e) => {
     e.preventDefault();
+
+    //validando los campos vacios
+    if (
+      nombre.trim() === "" ||
+      email.trim() === "" ||
+      password.trim() === "" ||
+      confirmar.trim() === ""
+    ) {
+      mostrarAlerta("Todos los campos son obligatorios", "alerta-error");
+      return;
+    }
   };
 
   return (
     <div className="form-usuario">
-      <div className="contenedor-form sombra dark">
-        <h1>Registrarme</h1>
+      {alerta ? (
+        <div className={`alerta ${alerta.categoria}`}> {alerta.msg} </div>
+      ) : null}
+      <div className="contenedor-form sombra-dark">
+        <h1>Obtener una cuenta</h1>
 
         <form onSubmit={onSubmit}>
           <div className="campo-form">
@@ -37,41 +56,44 @@ const NuevaCuenta = () => {
               type="text"
               id="nombre"
               name="nombre"
-              value={nombre}
               placeholder="Tu Nombre"
+              value={nombre}
               onChange={onChange}
             />
           </div>
+
           <div className="campo-form">
             <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
               name="email"
+              placeholder="Tu Email"
               value={email}
-              placeholder="Tu email"
               onChange={onChange}
             />
           </div>
+
           <div className="campo-form">
             <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
-              value={password}
               name="password"
               placeholder="Tu Password"
+              value={password}
               onChange={onChange}
             />
           </div>
+
           <div className="campo-form">
-            <label htmlFor="confirmar">Repetir Password</label>
+            <label htmlFor="confirmar">Confirmar Password</label>
             <input
               type="password"
               id="confirmar"
-              value={confirmar}
               name="confirmar"
-              placeholder="Repite Password"
+              placeholder="Repite tu Password"
+              value={confirmar}
               onChange={onChange}
             />
           </div>
@@ -80,12 +102,13 @@ const NuevaCuenta = () => {
             <input
               type="submit"
               className="btn btn-primario btn-block"
-              value="Iniciar Sesión"
+              value="Registrarme"
             />
           </div>
         </form>
+
         <Link to={"/"} className="enlace-cuenta">
-          Volver a iniciar sesion
+          Volver a Iniciar Sesión
         </Link>
       </div>
     </div>
