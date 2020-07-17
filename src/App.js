@@ -6,18 +6,21 @@ import NuevaCuenta from "./Components/Auth/nuevaCuenta";
 import Proyectos from "./Components/Proyectos/proyectos";
 import ProyectoState from "./Context/Proyectos/proyectoState";
 import TareaState from "./Context/Tarea/tareaState";
+import Alertastate from "./Context/alertas/tareaState";
 
 function App() {
   return (
     <ProyectoState>
       <TareaState>
-        <Router>
-          <Switch>
-            <Route exact path="/" component={Login} />
-            <Route exact path="/nueva-cuenta" component={NuevaCuenta} />
-            <Route exact path="/proyectos" component={Proyectos} />
-          </Switch>
-        </Router>
+        <Alertastate>
+          <Router>
+            <Switch>
+              <Route exact path="/" component={Login} />
+              <Route exact path="/nueva-cuenta" component={NuevaCuenta} />
+              <Route exact path="/proyectos" component={Proyectos} />
+            </Switch>
+          </Router>
+        </Alertastate>
       </TareaState>
     </ProyectoState>
   );
