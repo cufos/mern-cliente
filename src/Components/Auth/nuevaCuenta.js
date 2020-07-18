@@ -1,11 +1,28 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AlertaContext from "../../Context/alertas/alertaContext";
+import AuthContext from "../../Context/Auntenticacion/authContext";
 
-const NuevaCuenta = () => {
+const NuevaCuenta = (props) => {
   //extraer los valores del context
   const alertaContext = useContext(AlertaContext);
   const { alerta, mostrarAlerta } = alertaContext;
+  re;
+
+  const authContext = useContext(AuthContext);
+
+  const { registrarUsuario, mensaje, autenticado } = authContext;
+
+  // En caso que el usuario se haya autenticado o registrado o sea un registro duplicado
+  useEffect(() => {
+    if (autenticado) props.history.push("/proyectos");
+
+    if (mensaje) {
+      mostrarAlerta(mensaje.msg, mensaje.categoria);
+    }
+
+    //dependencias de mi effect
+  }, [mensaje, autenticado, props.history]);
 
   //creando estado de mi usuario
   const [usuario, guardarUsuario] = useState({
@@ -54,6 +71,13 @@ const NuevaCuenta = () => {
       mostrarAlerta("Los password no coinciden", "alerta-error");
       return;
     }
+
+    // Pasarlo a la accion
+    registrarUsuario({
+      nombre,
+      email,
+      password,
+    });
   };
 
   return (
