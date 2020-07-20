@@ -1,10 +1,14 @@
 import React, { useContext, useEffect } from "react";
+import AuthContext from "../../Context/Auntenticacion/authContext";
 
 const Barra = () => {
+  const authContext = useContext(AuthContext);
   const { usuario, usuarioAutenticado, cerrarSesion } = authContext;
 
   useEffect(() => {
     usuarioAutenticado();
+
+    //eslint-disable-next-line
   }, []);
 
   return (

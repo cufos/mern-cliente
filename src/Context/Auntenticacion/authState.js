@@ -103,7 +103,7 @@ const AuthState = (props) => {
   };
 
   return (
-    <AuthState.Provider
+    <AuthContext.Provider
       value={{
         token: state.token,
         autenticado: state.autenticado,
@@ -117,7 +117,7 @@ const AuthState = (props) => {
       }}
     >
       {props.children}
-    </AuthState.Provider>
+    </AuthContext.Provider>
   );
 };
 

@@ -21,6 +21,7 @@ const NuevaCuenta = (props) => {
     }
 
     //dependencias de mi effect
+    //eslint-disable-next-line
   }, [mensaje, autenticado, props.history]);
 
   //creando estado de mi usuario
